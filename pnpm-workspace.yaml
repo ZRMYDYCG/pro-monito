@@ -1,0 +1,4 @@
+packages:
+  - 'packages/monito-sdk'
+  - 'packages/monito-server'
+  - 'packages/monito-admin'
