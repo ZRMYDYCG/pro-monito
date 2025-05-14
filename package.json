@@ -1,7 +1,7 @@
 {
   "name": "monito-project",
   "version": "1.0.0",
-  "description": "埋点监控平台",
+  "description": "遵循非侵入式原则，支持自动埋点、性能监控、错误监控、用户体验监控，并基于 axios 封装上报接口，同时使用 IndexedDB 存储数据。",
   "main": "index.js",
   "scripts": {
     "dev": "pnpm -r dev",
@@ -27,6 +27,7 @@
       "prettier --write --loglevel warn"
     ]
   },
+  "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
