@@ -1,5 +1,5 @@
 {
-  "name": "react-ts-vite-admin",
+  "name": "@monito-project/monito-admin",
   "private": true,
   "version": "1.0.0",
   "scripts": {

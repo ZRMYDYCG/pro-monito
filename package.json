@@ -13,6 +13,7 @@
   "keywords": [
     "monitoring"
   ],
+  "workspaces": ["packages/*"],
   "dependencies": {
     "@monito-project/monito-sdk": "workspace:*"
   },
