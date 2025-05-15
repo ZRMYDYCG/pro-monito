@@ -13,7 +13,9 @@
   "keywords": [
     "monitoring"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@monito-project/monito-sdk": "workspace:*"
+  },
   "devDependencies": {
     "prettier": "^3.5.3"
   }

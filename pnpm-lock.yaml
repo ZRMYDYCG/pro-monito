@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@monito-project/monito-sdk':
+        specifier: workspace:*
+        version: link:packages/monito-sdk
     devDependencies:
       prettier:
         specifier: ^3.5.3

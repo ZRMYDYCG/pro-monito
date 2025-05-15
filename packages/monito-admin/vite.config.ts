@@ -21,7 +21,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
     base: viteEnv.VITE_MODE === 'pro' ? '/' + viteEnv.VITE_GLOB_APP_TITLE : '/',
     resolve: {
       alias: {
-        '@': resolve('src'),
+        '@': path.resolve(__dirname, 'src'),
       },
     },
     // global css
