@@ -6,10 +6,7 @@
   "scripts": {
     "dev": "pnpm -r dev",
     "build": "pnpm -r build",
-    "clean": "pnpm -r clean",
-    "prepare": "husky install",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\""
+    "clean": "pnpm -r clean"
   },
   "author": "",
   "license": "ISC",

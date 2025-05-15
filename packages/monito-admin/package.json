@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ant-design/happy-work-theme": "^1.0.0",
+    "@ant-design/icons": "^6.0.0",
     "ahooks": "^3.7.10",
     "antd": "^5.15.3",
     "axios": "^1.6.8",
