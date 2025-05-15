@@ -1,0 +1,109 @@
+import { configure, makeAutoObservable, reaction, action } from 'mobx'
+import { isMobile } from 'react-device-detect'
+import { makePersistable, isHydrated } from 'mobx-persist-store'
+import { getBrowserLang } from '@/utils/utils'
+
+configure({
+  enforceActions: 'never',
+})
+
+const isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)') // 系统是否为深色
+console.log('系统是否为深色:', isDarkTheme.matches)
+
+const language = getBrowserLang()
+console.log('系统语言:', language)
+
+type themeConfig = 'light' | 'dark'
+
+class Header {
+  isCollapse = true // false：展开
+  language = ['zh', 'en'].includes(language) && language // 国际化
+  componentSize = 'middle' // 组件大小
+  direction = 'ltr' // 字体方向
+  footer = true // 页脚
+  eruda = false // eruda调试面板
+  breadcrumb = true // 面包屑状态
+  breadcrumbArr = [] // 面包屑集合
+  themeType = isDarkTheme.matches ? 'dark' : 'light' // 主题类型
+  themeColor = '#1890ff'
+  isMobileBool = isMobile // 是否移动端或视口宽度小于768
+
+  // 重置状态
+  resetState() {
+    console.log('重置状态')
+    globalThis.localStorage.clear()
+    this.isCollapse = false
+    this.language = ['zh', 'en'].includes(language) ? language : 'zh'
+    this.componentSize = 'middle'
+    this.direction = 'ltr'
+    this.footer = true
+    this.eruda = false
+    this.breadcrumb = true
+    this.breadcrumbArr = []
+    this.themeType = isDarkTheme.matches ? 'dark' : 'light'
+    this.isMobileBool = isMobile
+  }
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+    makePersistable(this, {
+      name: 'HeaderStore',
+      // 需要持久化的属性key
+      properties: ['isCollapse', 'language', 'componentSize', 'direction', 'footer', 'breadcrumb', 'breadcrumbArr', 'themeType', 'themeColor', 'isMobileBool'],
+      storage: window.localStorage,
+    })
+  }
+
+  get isHydrated() {
+    return isHydrated(this)
+  }
+
+  setCollapse(bool: boolean) {
+    this.isCollapse = bool
+  }
+
+  setLanguage(str: string) {
+    this.language = str
+  }
+
+  setComponentSize(str: string) {
+    this.componentSize = str
+  }
+
+  setDirection(str: string) {
+    this.direction = str
+  }
+
+  setFooter(bool: boolean) {
+    this.footer = bool
+  }
+
+  setEruda(bool: boolean) {
+    this.eruda = bool
+    // @ts-ignore
+    bool ? eruda.init() : eruda.destroy()
+  }
+
+  setBreadcrumb(bool: boolean) {
+    this.breadcrumb = bool
+  }
+
+  setBreadcrumbArr(arr: any) {
+    this.breadcrumbArr = arr
+  }
+
+  setThemeType(type: themeConfig) {
+    this.themeType = type
+  }
+
+  setThemeColor(color: string) {
+    this.themeColor = color
+  }
+
+  setIsMobileBool(bool: boolean) {
+    this.isMobileBool = bool
+  }
+}
+
+const header = new Header()
+export default header

@@ -8,8 +8,6 @@
     "build": "pnpm -r build",
     "clean": "pnpm -r clean",
     "prepare": "husky install",
-    "lint": "eslint './packages/**/src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint './packages/**/src/**/*.{js,jsx,ts,tsx}' --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\""
   },
@@ -18,24 +16,8 @@
   "keywords": [
     "monitoring"
   ],
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix --cache --max-warnings 0"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write --loglevel warn"
-    ]
-  },
   "dependencies": {},
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "husky": "^8.0.0",
-    "lint-staged": "^15.4.3",
     "prettier": "^3.5.3"
   }
 }
