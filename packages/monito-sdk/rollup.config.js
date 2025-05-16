@@ -15,8 +15,8 @@ import {
   commonjsPlugin,
   copyPlugin,
   nodeResolvePlugin
-} from './src/build/index.js'
-import { MonitoBuildInfoPlugin } from './src/build/plugins/custom/info-plugin.js'
+} from './build/index.js'
+import { MonitoBuildInfoPlugin } from './build/plugins/custom/info-plugin.js'
 
 const { name: sdkName, version: sdkVersion } = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf-8')
