@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup --config rollup.config.ts --configPlugin typescript"
   },
   "keywords": [
     "monito",
