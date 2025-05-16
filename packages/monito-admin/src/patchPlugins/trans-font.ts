@@ -30,7 +30,7 @@ const editFont = (extractText: string = '') => {
 
 export const transFontFile = (extractTextArr: string[] = []) => {
   if (!extractTextArr?.length) return
-  extractTextArr.forEach(text => {
+  extractTextArr.forEach((text) => {
     editFont(text)
   })
 }

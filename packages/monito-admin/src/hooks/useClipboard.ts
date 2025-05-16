@@ -36,7 +36,7 @@ export function useClipboard() {
           .then(() => {
             res(copyText as string | number)
           })
-          .catch(err => {
+          .catch((err) => {
             rej(err)
           })
       } catch (error) {

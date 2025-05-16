@@ -50,7 +50,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
         '/api': {
           target: viteEnv.VITE_PROXY_URL, // easymock
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },

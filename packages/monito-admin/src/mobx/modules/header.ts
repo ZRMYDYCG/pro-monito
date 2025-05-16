@@ -49,7 +49,18 @@ class Header {
     makePersistable(this, {
       name: 'HeaderStore',
       // 需要持久化的属性key
-      properties: ['isCollapse', 'language', 'componentSize', 'direction', 'footer', 'breadcrumb', 'breadcrumbArr', 'themeType', 'themeColor', 'isMobileBool'],
+      properties: [
+        'isCollapse',
+        'language',
+        'componentSize',
+        'direction',
+        'footer',
+        'breadcrumb',
+        'breadcrumbArr',
+        'themeType',
+        'themeColor',
+        'isMobileBool',
+      ],
       storage: window.localStorage,
     })
   }
