@@ -7,14 +7,31 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "keywords": [],
+  "keywords": [
+    "monito",
+    "sdk",
+    "typescript",
+    "react",
+    "vue",
+    "埋点",
+    "监控"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup": "^4.40.2",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "vue": "^3.5.14",
+    "vue-router": "^4.5.1"
   }
 }
