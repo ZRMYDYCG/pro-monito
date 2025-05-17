@@ -23,6 +23,8 @@ export default {
           'ci',
           'chore',
           'revert',
+          'wip',
+          'lint',
         ],
       ],
     },
