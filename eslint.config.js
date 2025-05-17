@@ -5,6 +5,12 @@ import prettier from 'eslint-plugin-prettier'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import globals from 'globals'
 import path from 'path'
+import { fileURLToPath } from 'node:url'
+import { dirname } from 'node:path'
+
+// 获取当前文件目录路径
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default [
   {
@@ -30,11 +36,9 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        // 动态查找子项目的 tsconfig
         project: ['./packages/*/tsconfig.json'],
         warnOnUnsupportedTypeScriptVersion: true,
-        // 添加 tsconfig 根目录
-        tsconfigRootDir: path.resolve(__dirname)
+        tsconfigRootDir: __dirname
       }
     },
 
