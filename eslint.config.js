@@ -4,38 +4,61 @@ import tseslintParser from '@typescript-eslint/parser'
 import prettier from 'eslint-plugin-prettier'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import globals from 'globals'
+import path from 'path'
 
 export default [
   {
-    files: ['**/*.ts', '**/*.js'],
+    files: ['packages/**/*.ts', 'packages/**/*.js'],
+    ignores: [
+      '**/node_modules/',
+      '**/dist/',
+      '**/coverage/',
+      '**/.git/'
+    ],
+
     languageOptions: {
-      env: {
-        browser: true, // to enable browser globals like indexedDB
-      },
       globals: {
-        ...globals.node, // 引入 Node.js 的标准全局变量 (包括 console, process 等)
-        ...globals.jest, // 声明Jest测试框架的全局变量（describe/it/expect等）
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
         IDBDatabase: 'readonly',
+        IDBTransaction: 'readonly',
+        IDBRequest: 'readonly',
+        IDBOpenDBRequest: 'readonly'
       },
-      parser: tseslintParser, // TypeScript 解析器也能解析 JavaScript
+      parser: tseslintParser,
       parserOptions: {
+        ecmaVersion: 'latest',
         sourceType: 'module',
-      },
+        // 动态查找子项目的 tsconfig
+        project: ['./packages/*/tsconfig.json'],
+        warnOnUnsupportedTypeScriptVersion: true,
+        // 添加 tsconfig 根目录
+        tsconfigRootDir: path.resolve(__dirname)
+      }
     },
+
     plugins: {
       '@typescript-eslint': tseslint,
-      prettier: prettier,
+      prettier
     },
+
     rules: {
       ...eslint.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       ...eslintConfigPrettier.rules,
-      '@typescript-eslint/interface-name-prefix': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
       'prettier/prettier': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
-    },
-  },
+      '@typescript-eslint/consistent-type-imports': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { 
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_'
+        }
+      ],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-debugger': 'error'
+    }
+  }
 ]
