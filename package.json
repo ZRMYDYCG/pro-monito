@@ -5,8 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "pnpm -r dev",
+    "dev": "pnpm --filter @monito-project/monito-admin dev",
+    "dev:sdk": "pnpm --filter @monito-project/monito-sdk dev",
     "build": "pnpm -r build",
+    "build:sdk": "pnpm --filter @monito-project/monito-sdk build",
+    "build:admin": "pnpm --filter @monito-project/monito-admin build:dev",
     "clean": "pnpm -r clean",
     "prepare": "husky",
     "lint": "eslint packages --ext .ts",
