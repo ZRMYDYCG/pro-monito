@@ -5,21 +5,21 @@
  * @LastEditTime: 2025-05
  * @Description: 构建流程
  */
-import { readFileSync } from 'fs';
+import { readFileSync } from 'fs'
 
-import { 
+import {
   treeshakeConfig,
   inputConfig,
   outputConfig,
   typescriptPlugin,
   commonjsPlugin,
   copyPlugin,
-  nodeResolvePlugin
+  nodeResolvePlugin,
 } from './build/index.js'
 import { MonitoBuildInfoPlugin } from './build/plugins/custom/info-plugin.js'
 
 const { name: sdkName, version: sdkVersion } = JSON.parse(
-  readFileSync(new URL('./package.json', import.meta.url), 'utf-8')
+  readFileSync(new URL('./package.json', import.meta.url), 'utf-8'),
 )
 
 export default {
@@ -31,6 +31,6 @@ export default {
     typescriptPlugin(),
     commonjsPlugin(),
     copyPlugin(),
-    nodeResolvePlugin()
-  ]
+    nodeResolvePlugin(),
+  ],
 }

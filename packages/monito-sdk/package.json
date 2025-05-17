@@ -41,6 +41,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "fake-indexeddb": "^6.0.1",
     "idb": "^8.0.3",
     "react": "^18.2.0",
     "react-router-dom": "^6.22.3",

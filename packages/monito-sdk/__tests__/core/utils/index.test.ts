@@ -1,3 +1,10 @@
+/*
+ * @Author: 一勺
+ * @Date: 2025-05
+ * @LastEditors: ZRMYDYCG
+ * @LastEditTime: 2025-05
+ * @Description: Utils 工具函数测试用例
+ */
 import { generateUUID, debounce, throttle } from '../../../src/core/utils'
 
 // 测试 UUID 生成函数
