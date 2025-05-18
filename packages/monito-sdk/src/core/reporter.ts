@@ -5,7 +5,6 @@
  * @LastEditTime: 2025-05
  * @Description: 数据上报封装
     - 支持三种上报机制：定量(max=1)、定时、定量
-    - 上报后软删除数据
     - 提供清晰的接口暴露
     - 区分indexDB存储和上报逻辑
     - 目前上报仅console.log模拟

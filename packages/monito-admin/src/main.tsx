@@ -5,6 +5,17 @@ import "@/assets/iconfont/iconfont.less";
 import "@/assets/fonts-input/font.less";
 import "@/styles/common.less";
 import ReactApp from "./App";
+// import '../../../test/dist/myMonitor.js'
+import { createSDK } from "@monito-project/monito-sdk/src"
+
+createSDK({
+  dbName: 'monito_admin',
+  storeName: 'admin_events',
+  maxCount: 5,
+  reportInterval: 15000,
+  enableHardwareMonitor: true,
+  hardwareMonitorInterval: 5000
+})
 
 console.log("env环境:\n", import.meta.env);
 
