@@ -14,7 +14,7 @@ const __dirname = dirname(__filename)
 
 export default [
   {
-    files: ['packages/**/*.ts', 'packages/**/*.js'],
+    files: ['packages/**/*.ts', 'packages/**/*.js', 'cli/**/*.ts', 'cli/**/*.js'],
     ignores: [
       '**/node_modules/',
       '**/dist/',
@@ -53,6 +53,7 @@ export default [
       ...eslintConfigPrettier.rules,
       'prettier/prettier': 'error',
       '@typescript-eslint/consistent-type-imports': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off', // 关闭any类型检查
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { 
@@ -62,7 +63,8 @@ export default [
         }
       ],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'no-debugger': 'error'
+      'no-debugger': 'error',
+      'no-undef': 'off' // 关闭未定义变量检查
     }
   }
 ]
