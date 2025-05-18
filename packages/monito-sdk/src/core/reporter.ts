@@ -60,6 +60,15 @@ export class Reporter<T extends Record<string, any>> {
     try {
       const data = await this.getAllData()
       console.log('上报数据:', data)
+
+      const img = new Image()
+      img.src = `http://localhost:8080/send/monitor.gif?data=${encodeURIComponent(JSON.stringify(data))}`
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
+        await navigator.sendBeacon(`http://localhost:8080/send/monitor.gif`, blob)
+      }
+
       await this.clearReportedData()
     } catch (error) {
       console.error('上报失败:', error)

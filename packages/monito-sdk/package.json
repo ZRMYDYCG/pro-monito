@@ -36,6 +36,7 @@
     "ora": "^8.2.0",
     "rollup": "^4.40.2",
     "rollup-plugin-copy": "^3.5.0",
+    "axios": "^1.6.8",
     "ts-jest": "^29.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
