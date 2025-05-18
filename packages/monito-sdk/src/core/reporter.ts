@@ -18,6 +18,7 @@ interface ReporterOptions<T extends IndexDBData> {
   maxCount?: number
   interval?: number
   dataTransform?: (data: Omit<T, 'id'>) => T
+  enableSoftDelete?: boolean
 }
 
 export class Reporter<T extends Record<string, any>> {
@@ -26,6 +27,7 @@ export class Reporter<T extends Record<string, any>> {
   private interval: number
   private timer?: NodeJS.Timeout
   private dataTransform: (data: Omit<T, 'id'>) => T & IndexDBData
+  private enableSoftDelete: boolean
 
   constructor(options: ReporterOptions<T & IndexDBData>) {
     this.db = new IndexDBWrapper<T & IndexDBData>({
@@ -34,14 +36,17 @@ export class Reporter<T extends Record<string, any>> {
     })
     this.maxCount = options.maxCount || 1
     this.interval = options.interval || 0
+    this.enableSoftDelete = options.enableSoftDelete ?? true
     this.dataTransform =
       options.dataTransform ||
       ((data) => {
         const result = {
           ...data,
           id: Date.now().toString(),
+          deleted: false,
+          createdAt: Date.now(),
         }
-        return result as T & IndexDBData
+        return result as unknown as T & IndexDBData
       })
 
     if (this.interval > 0) {
@@ -83,21 +88,101 @@ export class Reporter<T extends Record<string, any>> {
     return allData.length
   }
 
-  private async getAllData(): Promise<(T & IndexDBData)[]> {
+  private async clearReportedData(): Promise<void> {
+    if (this.enableSoftDelete) {
+      const store = await this.db['getStore']('readwrite')
+      return new Promise((resolve, reject) => {
+        const request = store.openCursor()
+        let processedCount = 0
+
+        request.onsuccess = (event) => {
+          const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result
+          if (cursor) {
+            if (!cursor.value.deleted && !cursor.value.isReported) {
+              const reportedData = {
+                ...cursor.value,
+                deleted: true,
+                reportedAt: Date.now(),
+                isReported: true,
+              }
+              const updateRequest = cursor.update(reportedData)
+              updateRequest.onsuccess = () => {
+                processedCount++
+                cursor.continue()
+              }
+              updateRequest.onerror = () => {
+                reject(new Error(`标记删除失败: ${updateRequest.error}`))
+              }
+            } else {
+              cursor.continue()
+            }
+          } else {
+            if (processedCount > 0) {
+              console.log(`成功标记 ${processedCount} 条数据为已上报`)
+            }
+            resolve()
+          }
+        }
+        request.onerror = () => reject(new Error(`打开游标失败: ${request.error}`))
+      })
+    } else {
+      const store = await this.db['getStore']('readwrite')
+      return new Promise((resolve, reject) => {
+        const request = store.clear()
+        request.onsuccess = () => resolve()
+        request.onerror = () => reject(new Error(`清空数据失败: ${request.error}`))
+      })
+    }
+  }
+
+  private async getAllData(options?: { includeDeleted?: boolean }): Promise<(T & IndexDBData)[]> {
     const store = await this.db['getStore']('readonly')
     return new Promise((resolve, reject) => {
       const request = store.getAll()
-      request.onsuccess = () => resolve(request.result)
+      request.onsuccess = () => {
+        const result = request.result
+        resolve(
+          this.enableSoftDelete && !options?.includeDeleted
+            ? result.filter((item) => !item.deleted && !item.isReported) // 过滤已上报数据
+            : result,
+        )
+      }
       request.onerror = () => reject(new Error(`获取数据失败: ${request.error}`))
     })
   }
 
-  private async clearReportedData(): Promise<void> {
+  async cleanDeletedData(): Promise<void> {
+    if (!this.enableSoftDelete) return
+
     const store = await this.db['getStore']('readwrite')
+    const allData = await this.getAllData({ includeDeleted: true })
+
     return new Promise((resolve, reject) => {
-      const request = store.clear()
-      request.onsuccess = () => resolve()
-      request.onerror = () => reject(new Error(`清空数据失败: ${request.error}`))
+      const request = store.openCursor()
+      const deletedKeys: IDBValidKey[] = []
+
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result
+        if (cursor) {
+          if (cursor.value.deleted) {
+            deletedKeys.push(cursor.primaryKey)
+          }
+          cursor.continue()
+        } else {
+          Promise.all(
+            deletedKeys.map((key) => {
+              return new Promise<void>((res, rej) => {
+                const deleteRequest = store.delete(key)
+                deleteRequest.onsuccess = () => res()
+                deleteRequest.onerror = () => rej(new Error(`删除记录失败: ${deleteRequest.error}`))
+              })
+            }),
+          )
+            .then(() => resolve())
+            .catch((err) => reject(err))
+        }
+      }
+      request.onerror = () => reject(new Error(`清理删除数据失败: ${request.error}`))
     })
   }
 
