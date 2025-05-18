@@ -4,7 +4,8 @@
  * @LastEditors: 一勺
  * @LastEditTime: 2025-05
  * @Description: 数据上报封装
-    - 支持三种上报机制：定量(max=1)、定时、定量
+    - 支持软删除
+    - 支持三种上报机制：定量(max=1)、定时、手动（todo）
     - 提供清晰的接口暴露
     - 区分indexDB存储和上报逻辑
     - 目前上报仅console.log模拟
@@ -14,7 +15,6 @@ import { IndexDBWrapper } from './storage/indexDB'
 
 interface ReporterOptions<T extends IndexDBData> {
   dbName: string
-  storeName: string
   maxCount?: number
   interval?: number
   dataTransform?: (data: Omit<T, 'id'>) => T
@@ -28,11 +28,13 @@ export class Reporter<T extends Record<string, any>> {
   private timer?: NodeJS.Timeout
   private dataTransform: (data: Omit<T, 'id'>) => T & IndexDBData
   private enableSoftDelete: boolean
+  private moduleName: string
 
-  constructor(options: ReporterOptions<T & IndexDBData>) {
+  constructor(options: ReporterOptions<T & IndexDBData>, moduleName: string) {
+    this.moduleName = moduleName
     this.db = new IndexDBWrapper<T & IndexDBData>({
       dbName: options.dbName,
-      storeName: options.storeName,
+      storeName: moduleName,
     })
     this.maxCount = options.maxCount || 1
     this.interval = options.interval || 0

@@ -10,7 +10,6 @@ import { createSDK } from "@monito-project/monito-sdk/src"
 
 createSDK({
   dbName: 'monito_admin',
-  storeName: 'admin_events',
   maxCount: 5,
   reportInterval: 15000,
   enableHardwareMonitor: true,
